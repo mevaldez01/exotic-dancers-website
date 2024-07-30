@@ -1,14 +1,16 @@
 const mongoose = require('mongoose');
 
-const ContentSchema = new mongoose.Schema({
+const contentSchema = new mongoose.Schema({
   type: { type: String, required: true },
   url: { type: String, required: true },
   title: { type: String, required: true },
   description: { type: String, required: true },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   views: { type: Number, default: 0 },
   likes: { type: Number, default: 0 },
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
-});
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  comments: [{ type: String }],
+}, { timestamps: true });
 
-module.exports = mongoose.model('Content', ContentSchema);
+const Content = mongoose.model('Content', contentSchema);
+
+module.exports = Content;

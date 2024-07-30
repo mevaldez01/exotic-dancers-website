@@ -1,17 +1,17 @@
 const Content = require('../models/Content');
 
-exports.getAnalytics = async (req, res) => {
+exports.getUserAnalytics = async (req, res) => {
   try {
-    const content = await Content.find({ user: req.userId });
-    const analytics = content.map(item => ({
-      id: item._id,
-      title: item.title,
-      views: item.views,
-      likes: item.likes,
-      comments: item.comments.length,
-    }));
+    const userContent = await Content.find({ user: req.user.userId });
+    const analytics = {
+      totalContent: userContent.length,
+      totalViews: userContent.reduce((sum, content) => sum + content.views, 0),
+      totalLikes: userContent.reduce((sum, content) => sum + content.likes, 0),
+      totalComments: userContent.reduce((sum, content) => sum + content.comments.length, 0),
+    };
     res.status(200).json(analytics);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
